@@ -160,5 +160,7 @@ private fun BuildMeta.defaultLogLevel(): LogLevel {
         BuildType.DEBUG -> LogLevel.TRACE
         BuildType.NIGHTLY -> LogLevel.DEBUG
         BuildType.RELEASE -> LogLevel.INFO
+        BuildType.QUALIDEBUG -> LogLevel.DEBUG
+        BuildType.QUALI -> LogLevel.INFO
     }
 }

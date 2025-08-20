@@ -10,5 +10,7 @@ package io.element.android.libraries.core.meta
 enum class BuildType {
     RELEASE,
     NIGHTLY,
-    DEBUG
+    DEBUG,
+    QUALI,
+    QUALIDEBUG
 }

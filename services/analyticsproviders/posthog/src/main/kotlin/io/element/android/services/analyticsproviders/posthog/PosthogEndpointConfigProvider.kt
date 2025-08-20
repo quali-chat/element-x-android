@@ -38,6 +38,11 @@ class PosthogEndpointConfigProvider @Inject constructor(
                     host = "https://posthog.element.dev",
                     apiKey = "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
                 )
+                BuildType.QUALI,
+                BuildType.QUALIDEBUG -> PosthogEndpointConfig(
+                    host = BuildConfig.POSTHOG_HOST,
+                    apiKey = BuildConfig.POSTHOG_APIKEY,
+                )
             }
         } else {
             null

@@ -93,4 +93,6 @@ private fun BuildType.toSentryEnv() = when (this) {
     BuildType.RELEASE -> SentryConfig.ENV_RELEASE
     BuildType.NIGHTLY,
     BuildType.DEBUG -> SentryConfig.ENV_DEBUG
+    BuildType.QUALI -> SentryConfig.ENV_RELEASE
+    BuildType.QUALIDEBUG -> SentryConfig.ENV_DEBUG
 }
