@@ -293,7 +293,14 @@ dependencies {
         allEnterpriseImpl(project)
         implementation(projects.appicon.enterprise)
     } else {
-        implementation(projects.appicon.element)
+        // Use Element icons for non-quali build types only
+        "debugImplementation"(projects.appicon.element)
+        "releaseImplementation"(projects.appicon.element)
+        "nightlyImplementation"(projects.appicon.element)
+
+        // Use Quali icons for quali build types
+        "qualiImplementation"(projects.appicon.quali)
+        "qualiDebugImplementation"(projects.appicon.quali)
     }
     allFeaturesImpl(project)
     implementation(projects.features.migration.api)
