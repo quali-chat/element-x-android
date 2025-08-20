@@ -136,6 +136,39 @@ android {
             }
         }
 
+        register("quali") {
+            val release = getByName("release")
+            initWith(release)
+            // Custom application name for quali.chat builds
+            resValue("string", "app_name", "quali.chat")
+            resValue(
+                "string",
+                "login_redirect_scheme",
+                oidcRedirectSchemeBase,
+            )
+            matchingFallbacks += listOf("release")
+            signingConfig = signingConfigs.getByName("debug")
+
+            postprocessing {
+                initWith(release.postprocessing)
+            }
+        }
+
+        register("qualiDebug") {
+            val debug = getByName("debug")
+            initWith(debug)
+            // Custom application name for quali.chat debug builds
+            resValue("string", "app_name", "quali.chat debug")
+            resValue(
+                "string",
+                "login_redirect_scheme",
+                "$oidcRedirectSchemeBase.debug",
+            )
+            applicationIdSuffix = ".qualidebug"
+            matchingFallbacks += listOf("debug")
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
         register("nightly") {
             val release = getByName("release")
             initWith(release)
