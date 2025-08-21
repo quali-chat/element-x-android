@@ -31,14 +31,38 @@ class QualiEnterpriseService @Inject constructor() : EnterpriseService {
     override fun semanticColorsLight(): SemanticColors {
         return compoundColorsLight.copy(
             textActionAccent = Color(0xFF9BAFF7),
-            iconOnSolidPrimary = Color(0xFF000000)
+            iconOnSolidPrimary = Color(0xFF000000),
+            bgDecorative1 = Color(0xFF80D4DE),
+            textDecorative1 = Color(0xFF1A1A1A),
+            bgDecorative2 = Color(0xFFF8D288),
+            textDecorative2 = Color(0xFF1A1A1A),
+            bgDecorative3 = Color(0xFFAD93F8),
+            textDecorative3 = Color(0xFF1A1A1A),
+            bgDecorative4 = Color(0xFF80D4DE),
+            textDecorative4 = Color(0xFF1A1A1A),
+            bgDecorative5 = Color(0xFFF8D288),
+            textDecorative5 = Color(0xFF1A1A1A),
+            bgDecorative6 = Color(0xFFAD93F8),
+            textDecorative6 = Color(0xFF1A1A1A),
         )
     }
 
     override fun semanticColorsDark(): SemanticColors {
         return compoundColorsDark.copy(
             textActionAccent = Color(0xFF9BAFF7),
-            iconOnSolidPrimary = Color(0xFF000000)
+            iconOnSolidPrimary = Color(0xFF000000),
+            bgDecorative1 = Color(0xFF80D4DE),
+            textDecorative1 = Color(0xFF1A1A1A),
+            bgDecorative2 = Color(0xFFF8D288),
+            textDecorative2 = Color(0xFF1A1A1A),
+            bgDecorative3 = Color(0xFFAD93F8),
+            textDecorative3 = Color(0xFF1A1A1A),
+            bgDecorative4 = Color(0xFF80D4DE),
+            textDecorative4 = Color(0xFF1A1A1A),
+            bgDecorative5 = Color(0xFFF8D288),
+            textDecorative5 = Color(0xFF1A1A1A),
+            bgDecorative6 = Color(0xFFAD93F8),
+            textDecorative6 = Color(0xFF1A1A1A),
         )
     }
 
