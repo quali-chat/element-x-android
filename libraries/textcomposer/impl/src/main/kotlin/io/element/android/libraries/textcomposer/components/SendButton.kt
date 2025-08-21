@@ -23,9 +23,11 @@ import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.core.extensions.isQuali
 import io.element.android.libraries.designsystem.colors.gradientActionColors
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.matrix.api.core.EventId
@@ -44,6 +46,9 @@ internal fun SendButton(
     composerMode: MessageComposerMode,
     modifier: Modifier = Modifier,
 ) {
+    val buildMeta = LocalBuildMeta.current
+    val isQuali = buildMeta.isQuali()
+
     IconButton(
         modifier = modifier
             .size(48.dp),
@@ -72,10 +77,14 @@ internal fun SendButton(
                 // Note: accessibility is managed in TextComposer.
                 contentDescription = null,
                 tint = if (canSendMessage) {
-                    if (ElementTheme.colors.isLight) {
+                    if (isQuali) {
                         ElementTheme.colors.iconOnSolidPrimary
                     } else {
-                        ElementTheme.colors.iconPrimary
+                        if (ElementTheme.colors.isLight) {
+                            ElementTheme.colors.iconOnSolidPrimary
+                        } else {
+                            ElementTheme.colors.iconPrimary
+                        }
                     }
                 } else {
                     ElementTheme.colors.iconQuaternary

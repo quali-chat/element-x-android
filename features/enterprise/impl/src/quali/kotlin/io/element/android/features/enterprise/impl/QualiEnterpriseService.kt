@@ -52,6 +52,10 @@ class QualiEnterpriseService @Inject constructor() : EnterpriseService {
         return compoundColorsDark.copy(
             textActionAccent = Color(0xFF9BAFF7),
             bgAccentRest = Color(0xFF9BAFF7),
+            gradientActionStop1 = Color(0xFF9BAFF7),
+            gradientActionStop2 = Color(0xFF9BAFF7),
+            gradientActionStop3 = Color(0xFF9BAFF7),
+            gradientActionStop4 = Color(0xFF9BAFF7),
             iconOnSolidPrimary = Color(0xFF000000),
             bgDecorative1 = Color(0xFF80D4DE),
             textDecorative1 = Color(0xFF1A1A1A),
