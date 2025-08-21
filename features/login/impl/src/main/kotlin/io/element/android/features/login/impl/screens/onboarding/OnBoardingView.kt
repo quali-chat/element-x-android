@@ -209,7 +209,7 @@ private fun OnBoardingButtons(
                 color = ElementTheme.colors.textSecondary,
             )
         } else {
-            Text(
+            /*Text(
                 modifier = Modifier
                     .clickable {
                         state.eventSink(OnBoardingEvents.OnVersionClick)
@@ -218,7 +218,7 @@ private fun OnBoardingButtons(
                 text = stringResource(id = R.string.screen_onboarding_app_version, state.version),
                 style = ElementTheme.typography.fontBodySmRegular,
                 color = ElementTheme.colors.textSecondary,
-            )
+            )*/
         }
     }
 }
