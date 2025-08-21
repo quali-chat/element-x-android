@@ -56,6 +56,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
@@ -63,6 +64,7 @@ import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressField
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.core.extensions.isQuali
 
 @Composable
 fun ConfigureRoomView(
@@ -73,6 +75,7 @@ fun ConfigureRoomView(
 ) {
     val focusManager = LocalFocusManager.current
     val isAvatarActionsSheetVisible = remember { mutableStateOf(false) }
+    val isQuali = LocalBuildMeta.current.isQuali()
 
     fun onAvatarClick() {
         focusManager.clearFocus()
@@ -123,16 +126,21 @@ fun ConfigureRoomView(
                 )
             }
             RoomVisibilityOptions(
-                selected = when (state.config.roomVisibility) {
-                    is RoomVisibilityState.Private -> RoomVisibilityItem.Private
-                    is RoomVisibilityState.Public -> RoomVisibilityItem.Public
+                selected = if (isQuali) {
+                    RoomVisibilityItem.Private
+                } else {
+                    when (state.config.roomVisibility) {
+                        is RoomVisibilityState.Private -> RoomVisibilityItem.Private
+                        is RoomVisibilityState.Public -> RoomVisibilityItem.Public
+                    }
                 },
+                enabled = !isQuali,
                 onOptionClick = {
                     focusManager.clearFocus()
                     state.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(it))
                 },
             )
-            if (state.config.roomVisibility is RoomVisibilityState.Public && state.isKnockFeatureEnabled) {
+            if (!isQuali && state.config.roomVisibility is RoomVisibilityState.Public && state.isKnockFeatureEnabled) {
                 RoomAccessOptions(
                     selected = when (state.config.roomVisibility.roomAccess) {
                         RoomAccess.Anyone -> RoomAccessItem.Anyone
@@ -282,6 +290,7 @@ private fun ConfigureRoomOptions(
 private fun RoomVisibilityOptions(
     selected: RoomVisibilityItem,
     onOptionClick: (RoomVisibilityItem) -> Unit,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
     ConfigureRoomOptions(
@@ -301,7 +310,8 @@ private fun RoomVisibilityOptions(
                 headlineContent = { Text(text = stringResource(item.title)) },
                 supportingContent = { Text(text = stringResource(item.description)) },
                 trailingContent = ListItemContent.RadioButton(selected = isSelected),
-                onClick = { onOptionClick(item) },
+                enabled = enabled,
+                onClick = if (enabled) { { onOptionClick(item) } } else null,
             )
         }
     }

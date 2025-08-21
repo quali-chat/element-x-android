@@ -39,6 +39,8 @@ import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidityEf
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.extensions.isQuali
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.services.analytics.api.AnalyticsService
@@ -59,6 +61,7 @@ class ConfigureRoomPresenter @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val roomAliasHelper: RoomAliasHelper,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
+    private val buildMeta: BuildMeta,
 ) : Presenter<ConfigureRoomState> {
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
     private var pendingPermissionRequest = false
@@ -67,6 +70,13 @@ class ConfigureRoomPresenter @Inject constructor(
     override fun present(): ConfigureRoomState {
         val cameraPermissionState = cameraPermissionPresenter.present()
         val createRoomConfig by dataStore.createRoomConfigWithInvites.collectAsState(CreateRoomConfig())
+        val effectiveConfig = remember(createRoomConfig) {
+            if (buildMeta.isQuali()) {
+                createRoomConfig.copy(roomVisibility = RoomVisibilityState.Private)
+            } else {
+                createRoomConfig
+            }
+        }
         val homeserverName = remember { matrixClient.userIdServerName() }
         val isKnockFeatureEnabled by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock)
@@ -124,7 +134,7 @@ class ConfigureRoomPresenter @Inject constructor(
                 is ConfigureRoomEvents.RemoveUserFromSelection -> dataStore.selectedUserListDataStore.removeUserFromSelection(event.matrixUser)
                 is ConfigureRoomEvents.RoomAccessChanged -> dataStore.setRoomAccess(event.roomAccess)
                 is ConfigureRoomEvents.RoomAddressChanged -> dataStore.setRoomAddress(event.roomAddress)
-                is ConfigureRoomEvents.CreateRoom -> createRoom(createRoomConfig)
+                is ConfigureRoomEvents.CreateRoom -> createRoom(effectiveConfig)
                 is ConfigureRoomEvents.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
@@ -144,7 +154,7 @@ class ConfigureRoomPresenter @Inject constructor(
 
         return ConfigureRoomState(
             isKnockFeatureEnabled = isKnockFeatureEnabled,
-            config = createRoomConfig,
+            config = effectiveConfig,
             avatarActions = avatarActions,
             createRoomAction = createRoomAction.value,
             cameraPermissionState = cameraPermissionState,
