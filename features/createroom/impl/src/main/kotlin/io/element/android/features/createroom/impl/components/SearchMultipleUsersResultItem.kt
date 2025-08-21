@@ -27,6 +27,7 @@ fun SearchMultipleUsersResultItem(
     isUserSelected: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     val data = if (searchResult.isUnresolved) {
         CheckableUserRowData.Unresolved(
@@ -45,6 +46,7 @@ fun SearchMultipleUsersResultItem(
         modifier = modifier,
         data = data,
         onCheckedChange = onCheckedChange,
+        enabled = enabled,
     )
 }
 

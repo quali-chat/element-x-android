@@ -34,6 +34,8 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.usersearch.api.UserSearchResult
+import io.element.android.libraries.core.extensions.isQuali
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,6 +56,7 @@ fun SearchUserBar(
     placeHolderTitle: String = stringResource(CommonStrings.common_search_for_someone),
 ) {
     val columnState = rememberLazyListState()
+    val buildMeta = LocalBuildMeta.current
 
     SearchBar(
         query = query,
@@ -102,17 +105,22 @@ fun SearchUserBar(
             LazyColumn(state = columnState) {
                 if (isMultiSelectionEnable) {
                     itemsIndexed(users) { index, searchResult ->
+                        val isQuali = buildMeta.isQuali()
+                        val capReached = isQuali && selectedUsers.size >= 5
                         SearchMultipleUsersResultItem(
                             modifier = Modifier.fillMaxWidth(),
                             searchResult = searchResult,
                             isUserSelected = selectedUsers.contains(searchResult.matrixUser),
                             onCheckedChange = { checked ->
                                 if (checked) {
-                                    onUserSelect(searchResult.matrixUser)
+                                    if (!capReached) {
+                                        onUserSelect(searchResult.matrixUser)
+                                    }
                                 } else {
                                     onUserDeselect(searchResult.matrixUser)
                                 }
-                            }
+                            },
+                            enabled = !capReached || selectedUsers.contains(searchResult.matrixUser)
                         )
                         if (index < users.lastIndex) {
                             HorizontalDivider()

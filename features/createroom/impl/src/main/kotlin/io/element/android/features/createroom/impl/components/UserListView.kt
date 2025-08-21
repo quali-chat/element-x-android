@@ -31,6 +31,8 @@ import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.core.extensions.isQuali
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 
 @Composable
 fun UserListView(
@@ -40,6 +42,7 @@ fun UserListView(
     modifier: Modifier = Modifier,
     showBackButton: Boolean = true,
 ) {
+    val buildMeta = LocalBuildMeta.current
     Column(
         modifier = modifier,
     ) {
@@ -55,8 +58,12 @@ fun UserListView(
             onActiveChange = { state.eventSink(UserListEvents.OnSearchActiveChanged(it)) },
             onTextChange = { state.eventSink(UserListEvents.UpdateSearchQuery(it)) },
             onUserSelect = {
-                state.eventSink(UserListEvents.AddToSelection(it))
-                onSelectUser(it)
+                val isQuali = buildMeta.isQuali()
+                val canAdd = !isQuali || state.selectedUsers.size < 5
+                if (canAdd) {
+                    state.eventSink(UserListEvents.AddToSelection(it))
+                    onSelectUser(it)
+                }
             },
             onUserDeselect = {
                 state.eventSink(UserListEvents.RemoveFromSelection(it))
@@ -91,12 +98,16 @@ fun UserListView(
                         CheckableUserRow(
                             checked = isSelected,
                             onCheckedChange = {
+                                val isQuali = buildMeta.isQuali()
+                                val canAdd = !isQuali || state.selectedUsers.size < 5
                                 if (isSelected) {
                                     state.eventSink(UserListEvents.RemoveFromSelection(recentDirectRoom.matrixUser))
                                     onDeselectUser(recentDirectRoom.matrixUser)
                                 } else {
-                                    state.eventSink(UserListEvents.AddToSelection(recentDirectRoom.matrixUser))
-                                    onSelectUser(recentDirectRoom.matrixUser)
+                                    if (canAdd) {
+                                        state.eventSink(UserListEvents.AddToSelection(recentDirectRoom.matrixUser))
+                                        onSelectUser(recentDirectRoom.matrixUser)
+                                    }
                                 }
                             },
                             data = CheckableUserRowData.Resolved(
@@ -104,6 +115,7 @@ fun UserListView(
                                 name = recentDirectRoom.matrixUser.getBestName(),
                                 subtext = recentDirectRoom.matrixUser.userId.value,
                             ),
+                            enabled = isSelected || (!buildMeta.isQuali() || state.selectedUsers.size < 5),
                         )
                         if (index < state.recentDirectRooms.lastIndex) {
                             HorizontalDivider()

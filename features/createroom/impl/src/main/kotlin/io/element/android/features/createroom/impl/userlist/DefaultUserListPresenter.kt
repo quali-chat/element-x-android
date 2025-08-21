@@ -26,6 +26,8 @@ import io.element.android.libraries.matrix.api.room.recent.RecentDirectRoom
 import io.element.android.libraries.matrix.api.room.recent.getRecentDirectRooms
 import io.element.android.libraries.usersearch.api.UserRepository
 import io.element.android.libraries.usersearch.api.UserSearchResult
+import io.element.android.libraries.core.extensions.isQuali
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
@@ -49,6 +51,7 @@ class DefaultUserListPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): UserListState {
+        val buildMeta = LocalBuildMeta.current
         var recentDirectRooms by remember { mutableStateOf(emptyList<RecentDirectRoom>()) }
         LaunchedEffect(Unit) {
             recentDirectRooms = matrixClient.getRecentDirectRooms()
@@ -86,7 +89,13 @@ class DefaultUserListPresenter @AssistedInject constructor(
                 when (event) {
                     is UserListEvents.OnSearchActiveChanged -> isSearchActive = event.active
                     is UserListEvents.UpdateSearchQuery -> searchQuery = event.query
-                    is UserListEvents.AddToSelection -> userListDataStore.selectUser(event.matrixUser)
+                    is UserListEvents.AddToSelection -> {
+                        val isQuali = buildMeta.isQuali()
+                        val canAdd = !isQuali || selectedUsers.size < 5
+                        if (canAdd) {
+                            userListDataStore.selectUser(event.matrixUser)
+                        }
+                    }
                     is UserListEvents.RemoveFromSelection -> userListDataStore.removeUserFromSelection(event.matrixUser)
                 }
             },
