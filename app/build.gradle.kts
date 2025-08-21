@@ -256,11 +256,11 @@ androidComponents {
         if (variant.buildType == "quali") {
             variant.applicationId.set("chat.quali.android")
             // Restrict resources to English for Quali release builds
-            variant.androidResources?.resourceConfigurations?.set(setOf("en", "en-rUS"))
+            variant.androidResources.localeFilters.set(setOf("en", "en-rUS"))
         } else if (variant.buildType == "qualiDebug") {
             variant.applicationId.set("chat.quali.android.debug")
             // Restrict resources to English for Quali debug builds
-            variant.androidResources?.resourceConfigurations?.set(setOf("en", "en-rUS"))
+            variant.androidResources.localeFilters.set(setOf("en", "en-rUS"))
         }
     }
 
