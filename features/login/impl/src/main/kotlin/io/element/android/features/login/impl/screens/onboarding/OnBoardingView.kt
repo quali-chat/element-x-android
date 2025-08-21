@@ -8,22 +8,31 @@
 package io.element.android.features.login.impl.screens.onboarding
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,6 +51,8 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
+import io.element.android.libraries.core.extensions.isQuali
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -94,47 +105,125 @@ fun OnBoardingView(
 
 @Composable
 private fun OnBoardingContent(state: OnBoardingState) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-    ) {
+    val isQuali = LocalBuildMeta.current.isQuali()
+
+    if (isQuali) {
+        QualiOnBoardingSlides()
+    } else {
         Box(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = BiasAlignment(
-                horizontalBias = 0f,
-                verticalBias = -0.4f
-            )
         ) {
-            ElementLogoAtom(
-                size = ElementLogoAtomSize.Large,
-                modifier = Modifier.padding(top = ElementLogoAtomSize.Large.shadowRadius / 2)
-            )
-        }
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = BiasAlignment(
-                horizontalBias = 0f,
-                verticalBias = 0.6f
-            )
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = CenterHorizontally,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.screen_onboarding_welcome_title),
-                    color = ElementTheme.colors.textPrimary,
-                    style = ElementTheme.typography.fontHeadingLgBold,
-                    textAlign = TextAlign.Center
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = BiasAlignment(
+                    horizontalBias = 0f,
+                    verticalBias = -0.4f
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(id = R.string.screen_onboarding_welcome_message, state.productionApplicationName),
-                    color = ElementTheme.colors.textSecondary,
-                    style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 17.sp),
-                    textAlign = TextAlign.Center
+            ) {
+                ElementLogoAtom(
+                    size = ElementLogoAtomSize.Large,
+                    modifier = Modifier.padding(top = ElementLogoAtomSize.Large.shadowRadius / 2)
                 )
             }
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = BiasAlignment(
+                    horizontalBias = 0f,
+                    verticalBias = 0.6f
+                )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = CenterHorizontally,
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.screen_onboarding_welcome_title),
+                        color = ElementTheme.colors.textPrimary,
+                        style = ElementTheme.typography.fontHeadingLgBold,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(id = R.string.screen_onboarding_welcome_message, state.productionApplicationName),
+                        color = ElementTheme.colors.textSecondary,
+                        style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 17.sp),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun QualiOnBoardingSlides() {
+    val pagerState = rememberPagerState(initialPage = 0, pageCount = { 3 })
+    val titles = listOf(
+        R.string.quali_onboarding_slide1_title,
+        R.string.quali_onboarding_slide2_title,
+        R.string.quali_onboarding_slide3_title,
+    )
+    val subtitles = listOf(
+        R.string.quali_onboarding_slide1_subtitle,
+        R.string.quali_onboarding_slide2_subtitle,
+        R.string.quali_onboarding_slide3_subtitle,
+    )
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxWidth(),
+            ) { page ->
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = CenterHorizontally,
+                ) {
+                    Text(
+                        text = stringResource(id = titles[page]).uppercase(),
+                        color = ElementTheme.colors.textActionAccent,
+                        style = ElementTheme.typography.fontHeadingLgBold,
+                        textAlign = TextAlign.Center,
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = stringResource(id = subtitles[page]),
+                        color = ElementTheme.colors.textPrimary,
+                        style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 17.sp),
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(32.dp))
+            DotsIndicator(totalDots = 3, selectedIndex = pagerState.currentPage)
+        }
+    }
+}
+
+@Composable
+private fun DotsIndicator(totalDots: Int, selectedIndex: Int) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        repeat(totalDots) { index ->
+            val color = if (index == selectedIndex) {
+                ElementTheme.colors.textPrimary
+            } else {
+                ElementTheme.colors.textSecondary
+            }
+            Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .background(color = color, shape = CircleShape)
+            )
         }
     }
 }
@@ -147,6 +236,8 @@ private fun OnBoardingButtons(
     onCreateAccount: () -> Unit,
     onReportProblem: () -> Unit,
 ) {
+    val isQuali = LocalBuildMeta.current.isQuali()
+
     val isLoading by remember(state.loginMode) {
         derivedStateOf {
             state.loginMode is AsyncData.Loading
@@ -209,16 +300,18 @@ private fun OnBoardingButtons(
                 color = ElementTheme.colors.textSecondary,
             )
         } else {
-            /*Text(
-                modifier = Modifier
-                    .clickable {
-                        state.eventSink(OnBoardingEvents.OnVersionClick)
-                    }
-                    .padding(16.dp),
-                text = stringResource(id = R.string.screen_onboarding_app_version, state.version),
-                style = ElementTheme.typography.fontBodySmRegular,
-                color = ElementTheme.colors.textSecondary,
-            )*/
+            if (!isQuali) {
+                Text(
+                    modifier = Modifier
+                        .clickable {
+                            state.eventSink(OnBoardingEvents.OnVersionClick)
+                        }
+                        .padding(16.dp),
+                    text = stringResource(id = R.string.screen_onboarding_app_version, state.version),
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            }
         }
     }
 }
