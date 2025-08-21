@@ -15,6 +15,16 @@ fun BuildMeta.isElement(): Boolean {
         BuildType.RELEASE -> applicationId == "io.element.android.x"
         BuildType.NIGHTLY -> applicationId == "io.element.android.x.nightly"
         BuildType.DEBUG -> applicationId == "io.element.android.x.debug"
+        BuildType.QUALI,
+        BuildType.QUALIDEBUG -> false
+    }
+}
+
+fun BuildMeta.isQuali(): Boolean {
+    return when (buildType) {
+        BuildType.RELEASE,
+        BuildType.NIGHTLY,
+        BuildType.DEBUG -> false
         BuildType.QUALI -> applicationId == "chat.quali.android"
         BuildType.QUALIDEBUG -> applicationId == "chat.quali.android.debug"
     }
