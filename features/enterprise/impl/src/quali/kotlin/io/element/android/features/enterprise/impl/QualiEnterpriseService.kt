@@ -31,6 +31,7 @@ class QualiEnterpriseService @Inject constructor() : EnterpriseService {
     override fun semanticColorsLight(): SemanticColors {
         return compoundColorsLight.copy(
             textActionAccent = Color(0xFF9BAFF7),
+            bgAccentRest = Color(0xFF9BAFF7),
             iconOnSolidPrimary = Color(0xFF000000),
             bgDecorative1 = Color(0xFF80D4DE),
             textDecorative1 = Color(0xFF1A1A1A),
@@ -50,6 +51,7 @@ class QualiEnterpriseService @Inject constructor() : EnterpriseService {
     override fun semanticColorsDark(): SemanticColors {
         return compoundColorsDark.copy(
             textActionAccent = Color(0xFF9BAFF7),
+            bgAccentRest = Color(0xFF9BAFF7),
             iconOnSolidPrimary = Color(0xFF000000),
             bgDecorative1 = Color(0xFF80D4DE),
             textDecorative1 = Color(0xFF1A1A1A),
