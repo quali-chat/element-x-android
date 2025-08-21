@@ -42,6 +42,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
+import io.element.android.libraries.core.extensions.isQuali
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.EditableAvatarView
 import io.element.android.libraries.permissions.api.PermissionsView
@@ -113,6 +115,7 @@ fun EditUserProfileView(
                 value = state.displayName,
                 placeholder = stringResource(CommonStrings.common_room_name_placeholder),
                 singleLine = true,
+                enabled = !LocalBuildMeta.current.isQuali(),
                 onValueChange = { state.eventSink(EditUserProfileEvents.UpdateDisplayName(it)) },
             )
         }
