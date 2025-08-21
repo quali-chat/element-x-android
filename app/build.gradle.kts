@@ -164,7 +164,6 @@ android {
                 "login_redirect_scheme",
                 "$oidcRedirectSchemeBase.debug",
             )
-            applicationIdSuffix = ".qualidebug"
             matchingFallbacks += listOf("debug")
             signingConfig = signingConfigs.getByName("debug")
         }
@@ -253,6 +252,11 @@ androidComponents {
             // Assigns the new version code to output.versionCode, which changes the version code
             // for only the output APK, not for the variant itself.
             output.versionCode.set((output.versionCode.orNull ?: 0) * 10 + abiCode)
+        }
+        if (variant.buildType == "quali") {
+            variant.applicationId.set("chat.quali.android")
+        } else if (variant.buildType == "qualiDebug") {
+            variant.applicationId.set("chat.quali.android.debug")
         }
     }
 
