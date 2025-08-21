@@ -52,6 +52,7 @@ import io.element.android.features.messages.impl.voicemessages.composer.VoiceMes
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -237,6 +238,7 @@ class MessagesPresenter @AssistedInject constructor(
             roomName = roomInfo.name,
             roomAvatar = roomAvatar,
             heroes = heroes,
+            isPublicRoom = (roomInfo.isPublic == true) || (roomInfo.joinRule == JoinRule.Public),
             composerState = composerState,
             userEventPermissions = userEventPermissions,
             voiceMessageComposerState = voiceMessageComposerState,

@@ -85,6 +85,8 @@ import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.core.extensions.isQuali
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
@@ -113,6 +115,7 @@ fun RoomDetailsView(
     modifier: Modifier = Modifier,
     leaveRoomView: @Composable () -> Unit,
 ) {
+    val isQuali = LocalBuildMeta.current.isQuali()
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     Scaffold(
         modifier = modifier,
@@ -174,6 +177,7 @@ fun RoomDetailsView(
                 onShareRoom = onShareRoom,
                 onInvitePeople = invitePeople,
                 onCall = onJoinCallClick,
+                showCallAction = !(isQuali && state.isPublic),
             )
             Spacer(Modifier.height(12.dp))
 
@@ -326,6 +330,7 @@ private fun MainActionsSection(
     onShareRoom: () -> Unit,
     onInvitePeople: () -> Unit,
     onCall: () -> Unit,
+    showCallAction: Boolean,
 ) {
     Row(
         modifier = Modifier
@@ -352,7 +357,7 @@ private fun MainActionsSection(
                 )
             }
         }
-        if (state.roomCallState.hasPermissionToJoin()) {
+        if (showCallAction && state.roomCallState.hasPermissionToJoin()) {
             // TODO Improve the view depending on all the cases here?
             MainActionButton(
                 title = stringResource(CommonStrings.action_call),

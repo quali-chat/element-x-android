@@ -35,6 +35,7 @@ data class MessagesState(
     val roomName: String?,
     val roomAvatar: AvatarData,
     val heroes: ImmutableList<AvatarData>,
+    val isPublicRoom: Boolean,
     val userEventPermissions: UserEventPermissions,
     val composerState: MessageComposerState,
     val voiceMessageComposerState: VoiceMessageComposerState,

@@ -78,6 +78,8 @@ import io.element.android.features.messages.impl.voicemessages.composer.VoiceMes
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageSendingFailedDialog
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.features.roomcall.api.RoomCallState
+import io.element.android.libraries.core.extensions.isQuali
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
 import io.element.android.libraries.designsystem.components.ExpandableBottomSheetLayout
@@ -129,6 +131,7 @@ fun MessagesView(
     forceJumpToBottomVisibility: Boolean = false,
     knockRequestsBannerView: @Composable () -> Unit,
 ) {
+    val isQuali = LocalBuildMeta.current.isQuali()
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.LifecycleEvent(event))
     }
@@ -206,6 +209,7 @@ fun MessagesView(
                             onBackClick = { hidingKeyboard { onBackClick() } },
                             onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                             onJoinCallClick = onJoinCallClick,
+                            showCallAction = !(isQuali && state.isPublicRoom),
                         )
                     }
                 },
@@ -487,6 +491,7 @@ private fun MessagesViewTopBar(
     onRoomDetailsClick: () -> Unit,
     onJoinCallClick: () -> Unit,
     onBackClick: () -> Unit,
+    showCallAction: Boolean,
 ) {
     TopAppBar(
         navigationIcon = {
@@ -530,11 +535,13 @@ private fun MessagesViewTopBar(
             }
         },
         actions = {
-            CallMenuItem(
-                roomCallState = roomCallState,
-                onJoinCallClick = onJoinCallClick,
-            )
-            Spacer(Modifier.width(8.dp))
+            if (showCallAction) {
+                CallMenuItem(
+                    roomCallState = roomCallState,
+                    onJoinCallClick = onJoinCallClick,
+                )
+                Spacer(Modifier.width(8.dp))
+            }
         },
         windowInsets = WindowInsets(0.dp)
     )
