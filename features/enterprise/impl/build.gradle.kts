@@ -12,6 +12,21 @@ plugins {
 
 android {
     namespace = "io.element.android.features.enterprise.impl"
+    buildTypes {
+        // Build types aligned with the app module to allow variant-specific sources
+        maybeCreate("quali").apply {
+            matchingFallbacks += listOf("release")
+        }
+        maybeCreate("qualiDebug").apply {
+            initWith(getByName("debug"))
+            matchingFallbacks += listOf("quali", "debug")
+        }
+    }
+    sourceSets {
+        maybeCreate("quali")
+        maybeCreate("qualiDebug")
+        getByName("qualiDebug").java.srcDir("src/quali/kotlin")
+    }
 }
 
 setupAnvil()
