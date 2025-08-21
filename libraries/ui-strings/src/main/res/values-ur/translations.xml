@@ -203,7 +203,7 @@
   <string name="common_rich_text_editor">"امیر مدیرِ متن"</string>
   <string name="common_room">"کمرہ"</string>
   <string name="common_room_name">"کمرے کا نام"</string>
-  <string name="common_room_name_placeholder">"e.g. your project name"</string>
+  <string name="common_room_name_placeholder">"Room name"</string>
   <string name="common_saved_changes">"محفوظ شدہ تبدیلیاں"</string>
   <string name="common_saving">"محفوظ کر رہا ہے"</string>
   <string name="common_screen_lock">"صفحۂ نمائش قفل"</string>

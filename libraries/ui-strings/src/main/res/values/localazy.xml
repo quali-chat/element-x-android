@@ -277,7 +277,7 @@ Reason: %1$s."</string>
   <string name="common_rich_text_editor">"Rich text editor"</string>
   <string name="common_room">"Room"</string>
   <string name="common_room_name">"Room name"</string>
-  <string name="common_room_name_placeholder">"e.g. your project name"</string>
+  <string name="common_room_name_placeholder">"Room name"</string>
   <plurals name="common_rooms">
     <item quantity="one">"%1$d Room"</item>
     <item quantity="other">"%1$d Rooms"</item>

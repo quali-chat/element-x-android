@@ -9,7 +9,7 @@ appId: ${MAESTRO_APP_ID}
     text: ${MAESTRO_INVITEE1_MXID}
     index: 1
 - tapOn: "Next"
-- tapOn: "e.g. your project name"
+- tapOn: "Room name"
 - inputText: "aRoomName"
 - tapOn: "What is this room about?"
 - inputText: "aRoomTopic"
