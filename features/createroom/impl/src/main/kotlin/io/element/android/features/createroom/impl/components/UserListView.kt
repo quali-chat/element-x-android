@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.core.extensions.isQuali
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
+import io.element.android.libraries.core.quali.QualiRoomLimits
 
 @Composable
 fun UserListView(
@@ -59,7 +60,7 @@ fun UserListView(
             onTextChange = { state.eventSink(UserListEvents.UpdateSearchQuery(it)) },
             onUserSelect = {
                 val isQuali = buildMeta.isQuali()
-                val canAdd = !isQuali || state.selectedUsers.size < 5
+                val canAdd = !isQuali || state.selectedUsers.size < QualiRoomLimits.MAX_PRIVATE_ROOM_MEMBERS
                 if (canAdd) {
                     state.eventSink(UserListEvents.AddToSelection(it))
                     onSelectUser(it)
@@ -99,7 +100,7 @@ fun UserListView(
                             checked = isSelected,
                             onCheckedChange = {
                                 val isQuali = buildMeta.isQuali()
-                                val canAdd = !isQuali || state.selectedUsers.size < 5
+                                val canAdd = !isQuali || state.selectedUsers.size < QualiRoomLimits.MAX_PRIVATE_ROOM_MEMBERS
                                 if (isSelected) {
                                     state.eventSink(UserListEvents.RemoveFromSelection(recentDirectRoom.matrixUser))
                                     onDeselectUser(recentDirectRoom.matrixUser)
@@ -115,7 +116,7 @@ fun UserListView(
                                 name = recentDirectRoom.matrixUser.getBestName(),
                                 subtext = recentDirectRoom.matrixUser.userId.value,
                             ),
-                            enabled = isSelected || (!buildMeta.isQuali() || state.selectedUsers.size < 5),
+                            enabled = isSelected || (!buildMeta.isQuali() || state.selectedUsers.size < QualiRoomLimits.MAX_PRIVATE_ROOM_MEMBERS),
                         )
                         if (index < state.recentDirectRooms.lastIndex) {
                             HorizontalDivider()

@@ -36,6 +36,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.usersearch.api.UserSearchResult
 import io.element.android.libraries.core.extensions.isQuali
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
+import io.element.android.libraries.core.quali.QualiRoomLimits
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -106,7 +107,7 @@ fun SearchUserBar(
                 if (isMultiSelectionEnable) {
                     itemsIndexed(users) { index, searchResult ->
                         val isQuali = buildMeta.isQuali()
-                        val capReached = isQuali && selectedUsers.size >= 5
+                        val capReached = isQuali && selectedUsers.size >= QualiRoomLimits.MAX_PRIVATE_ROOM_MEMBERS
                         SearchMultipleUsersResultItem(
                             modifier = Modifier.fillMaxWidth(),
                             searchResult = searchResult,

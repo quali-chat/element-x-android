@@ -28,6 +28,7 @@ import io.element.android.libraries.usersearch.api.UserRepository
 import io.element.android.libraries.usersearch.api.UserSearchResult
 import io.element.android.libraries.core.extensions.isQuali
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
+import io.element.android.libraries.core.quali.QualiRoomLimits
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
@@ -91,7 +92,7 @@ class DefaultUserListPresenter @AssistedInject constructor(
                     is UserListEvents.UpdateSearchQuery -> searchQuery = event.query
                     is UserListEvents.AddToSelection -> {
                         val isQuali = buildMeta.isQuali()
-                        val canAdd = !isQuali || selectedUsers.size < 5
+                        val canAdd = !isQuali || selectedUsers.size < QualiRoomLimits.MAX_PRIVATE_ROOM_MEMBERS
                         if (canAdd) {
                             userListDataStore.selectUser(event.matrixUser)
                         }

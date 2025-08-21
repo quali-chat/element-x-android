@@ -27,6 +27,7 @@ import io.element.android.services.apperror.api.AppErrorStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 
 @ContributesNode(RoomScope::class)
 class RoomInviteMembersNode @AssistedInject constructor(
@@ -72,7 +73,9 @@ class RoomInviteMembersNode @AssistedInject constructor(
                         )
                     }
                 }
-            }
+            },
+            isPrivateRoom = room.roomInfoFlow.value.joinRule?.let { it == JoinRule.Private || it == JoinRule.Invite } == true,
+            joinedMembersCount = room.roomInfoFlow.value.joinedMembersCount
         )
     }
 }

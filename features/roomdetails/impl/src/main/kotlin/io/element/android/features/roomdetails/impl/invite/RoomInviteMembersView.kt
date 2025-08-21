@@ -35,6 +35,7 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.CheckableUserRow
 import io.element.android.libraries.matrix.ui.components.CheckableUserRowData
@@ -42,6 +43,8 @@ import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.core.extensions.isQuali
+import io.element.android.libraries.core.quali.QualiRoomLimits
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -50,6 +53,8 @@ fun RoomInviteMembersView(
     onBackClick: () -> Unit,
     onSubmitClick: (List<MatrixUser>) -> Unit,
     modifier: Modifier = Modifier,
+    isPrivateRoom: Boolean = false,
+    joinedMembersCount: Long = 0L,
 ) {
     Scaffold(
         modifier = modifier,
@@ -84,6 +89,8 @@ fun RoomInviteMembersView(
                 onActiveChange = { state.eventSink(RoomInviteMembersEvents.OnSearchActiveChanged(it)) },
                 onTextChange = { state.eventSink(RoomInviteMembersEvents.UpdateSearchQuery(it)) },
                 onToggleUser = { state.eventSink(RoomInviteMembersEvents.ToggleUser(it)) },
+                isPrivateRoom = isPrivateRoom,
+                joinedMembersCount = joinedMembersCount,
             )
 
             if (!state.isSearchActive) {
@@ -132,6 +139,8 @@ private fun RoomInviteMembersSearchBar(
     onToggleUser: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
     placeHolderTitle: String = stringResource(CommonStrings.common_search_for_someone),
+    isPrivateRoom: Boolean = false,
+    joinedMembersCount: Long = 0L,
 ) {
     SearchBar(
         query = query,
@@ -159,6 +168,9 @@ private fun RoomInviteMembersSearchBar(
             }
         },
         resultHandler = { results ->
+            val isQuali = LocalBuildMeta.current.isQuali()
+            val currentTotal = joinedMembersCount + selectedUsers.size
+            val capReached = isQuali && isPrivateRoom && currentTotal >= QualiRoomLimits.MAX_PRIVATE_ROOM_MEMBERS
             Text(
                 text = stringResource(id = CommonStrings.common_search_results),
                 style = ElementTheme.typography.fontBodyLgMedium,
@@ -171,7 +183,7 @@ private fun RoomInviteMembersSearchBar(
                 itemsIndexed(results) { index, invitableUser ->
                     val notInvitedOrJoined = !(invitableUser.isAlreadyInvited || invitableUser.isAlreadyJoined)
                     val isUnresolved = invitableUser.isUnresolved && notInvitedOrJoined
-                    val enabled = isUnresolved || notInvitedOrJoined
+                    val enabled = (isUnresolved || notInvitedOrJoined) && (!capReached || invitableUser.isSelected)
                     val data = if (isUnresolved) {
                         CheckableUserRowData.Unresolved(
                             avatarData = invitableUser.matrixUser.getAvatarData(AvatarSize.UserListItem),
@@ -195,7 +207,15 @@ private fun RoomInviteMembersSearchBar(
                         checked = invitableUser.isSelected,
                         enabled = enabled,
                         data = data,
-                        onCheckedChange = { onToggleUser(invitableUser.matrixUser) },
+                        onCheckedChange = { checked ->
+                            if (checked) {
+                                if (!capReached) {
+                                    onToggleUser(invitableUser.matrixUser)
+                                }
+                            } else {
+                                onToggleUser(invitableUser.matrixUser)
+                            }
+                        },
                         modifier = Modifier.fillMaxWidth()
                     )
 
