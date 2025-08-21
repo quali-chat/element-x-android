@@ -76,8 +76,10 @@ fun OnBoardingView(
     onReportProblem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val isQuali = LocalBuildMeta.current.isQuali()
     OnBoardingPage(
         modifier = modifier,
+        showBackground = !isQuali,
         content = {
             OnBoardingContent(state = state)
             LoginModeView(
