@@ -24,7 +24,7 @@ enum class FeatureFlags(
         key = "feature.roomdirectorysearch",
         title = "Room directory search",
         description = "Allow user to search for public rooms in their homeserver",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     ShowBlockedUsersDetails(
