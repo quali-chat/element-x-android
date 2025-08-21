@@ -45,6 +45,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.backgroundVerticalGradient
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.applyScaleDown
@@ -60,6 +61,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.core.extensions.isQuali
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -141,7 +143,7 @@ private fun DefaultRoomListTopBar(
                 MediumTopAppBar(
                     modifier = Modifier
                         .backgroundVerticalGradient(
-                            isVisible = !areSearchResultsDisplayed,
+                            isVisible = !areSearchResultsDisplayed && !LocalBuildMeta.current.isQuali(),
                         )
                         .statusBarsPadding(),
                     colors = TopAppBarDefaults.mediumTopAppBarColors(
