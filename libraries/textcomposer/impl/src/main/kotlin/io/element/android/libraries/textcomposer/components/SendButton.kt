@@ -78,7 +78,7 @@ internal fun SendButton(
                 contentDescription = null,
                 tint = if (canSendMessage) {
                     if (isQuali) {
-                        ElementTheme.colors.iconOnSolidPrimary
+                        ElementTheme.colors.iconPrimary
                     } else {
                         if (ElementTheme.colors.isLight) {
                             ElementTheme.colors.iconOnSolidPrimary

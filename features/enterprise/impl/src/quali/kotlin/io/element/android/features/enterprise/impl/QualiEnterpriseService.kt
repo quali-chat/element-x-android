@@ -32,7 +32,6 @@ class QualiEnterpriseService @Inject constructor() : EnterpriseService {
         return compoundColorsLight.copy(
             textActionAccent = Color(0xFF9BAFF7),
             bgAccentRest = Color(0xFF9BAFF7),
-            iconOnSolidPrimary = Color(0xFF000000),
             bgDecorative1 = Color(0xFF80D4DE),
             textDecorative1 = Color(0xFF1A1A1A),
             bgDecorative2 = Color(0xFFF8D288),
@@ -45,6 +44,10 @@ class QualiEnterpriseService @Inject constructor() : EnterpriseService {
             textDecorative5 = Color(0xFF1A1A1A),
             bgDecorative6 = Color(0xFFAD93F8),
             textDecorative6 = Color(0xFF1A1A1A),
+            gradientActionStop1 = Color(0xFF9BAFF7),
+            gradientActionStop2 = Color(0xFF9BAFF7),
+            gradientActionStop3 = Color(0xFF9BAFF7),
+            gradientActionStop4 = Color(0xFF9BAFF7)
         )
     }
 
