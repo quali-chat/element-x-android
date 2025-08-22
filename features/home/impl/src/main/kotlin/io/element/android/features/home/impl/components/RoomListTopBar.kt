@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
@@ -28,9 +30,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import io.element.android.appconfig.RoomListConfig
 import io.element.android.compound.theme.ElementTheme
@@ -65,6 +70,10 @@ import io.element.android.libraries.core.extensions.isQuali
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.ImageLoader
+import coil3.svg.SvgDecoder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -140,6 +149,7 @@ private fun DefaultRoomListTopBar(
             ),
         ) {
             Column {
+                Box {
                 MediumTopAppBar(
                     modifier = Modifier
                         .backgroundVerticalGradient(
@@ -228,6 +238,30 @@ private fun DefaultRoomListTopBar(
                     scrollBehavior = scrollBehavior,
                     windowInsets = WindowInsets(0.dp),
                 )
+                    if (LocalBuildMeta.current.isQuali()) {
+                        val context = LocalContext.current
+                        val imageLoader = remember {
+                            ImageLoader.Builder(context)
+                                .components { add(SvgDecoder.Factory()) }
+                                .build()
+                        }
+                        val tintColor = if (ElementTheme.isLightTheme) Color.Black else Color.White
+                        AsyncImage(
+                            model = ImageRequest.Builder(context)
+                                .data(io.element.android.features.home.impl.R.raw.quali)
+                                .build(),
+                            imageLoader = imageLoader,
+                            contentDescription = null,
+                            contentScale = ContentScale.Fit,
+                            colorFilter = ColorFilter.tint(tintColor),
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .statusBarsPadding()
+                                .padding(top = 20.dp)
+                                .height(28.dp)
+                        )
+                    }
+                }
                 if (displayFilters) {
                     RoomListFiltersView(
                         state = filtersState,

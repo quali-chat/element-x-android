@@ -56,6 +56,8 @@ dependencies {
     implementation(projects.features.reportroom.api)
     implementation(projects.features.changeroommemberroles.api)
     api(projects.features.home.api)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
 
     testImplementation(libs.androidx.compose.ui.test.junit)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)

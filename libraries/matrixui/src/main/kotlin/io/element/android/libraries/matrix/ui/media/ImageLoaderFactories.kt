@@ -13,6 +13,7 @@ import coil3.ImageLoader
 import coil3.gif.AnimatedImageDecoder
 import coil3.gif.GifDecoder
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import coil3.svg.SvgDecoder
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -47,6 +48,8 @@ class DefaultLoggedInImageLoaderFactory @Inject constructor(
                 } else {
                     add(GifDecoder.Factory())
                 }
+                // Add SVG support
+                add(SvgDecoder.Factory())
                 add(AvatarDataKeyer())
                 add(MediaRequestDataKeyer())
                 add(AvatarDataFetcherFactory(matrixClient))
@@ -71,6 +74,8 @@ class NotLoggedInImageLoaderFactory @Inject constructor(
                         }
                     )
                 )
+                // Add SVG support
+                add(SvgDecoder.Factory())
             }
             .build()
     }
