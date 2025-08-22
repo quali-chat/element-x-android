@@ -64,11 +64,13 @@ fun aCreateRoomRootState(
     userListState: UserListState = aUserListState(),
     startDmAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
     isRoomDirectorySearchEnabled: Boolean = false,
+    isInviteFriendsEnabled: Boolean = true,
     eventSink: (CreateRoomRootEvents) -> Unit = {},
 ) = CreateRoomRootState(
     applicationName = applicationName,
     userListState = userListState,
     startDmAction = startDmAction,
     isRoomDirectorySearchEnabled = isRoomDirectorySearchEnabled,
+    isInviteFriendsEnabled = isInviteFriendsEnabled,
     eventSink = eventSink,
 )

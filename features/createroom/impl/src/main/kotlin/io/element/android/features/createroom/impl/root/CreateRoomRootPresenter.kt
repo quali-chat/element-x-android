@@ -22,6 +22,7 @@ import io.element.android.features.createroom.impl.userlist.UserListPresenterArg
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.extensions.isQuali
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -74,6 +75,7 @@ class CreateRoomRootPresenter @Inject constructor(
             userListState = userListState,
             startDmAction = startDmActionState.value,
             isRoomDirectorySearchEnabled = isRoomDirectorySearchEnabled,
+            isInviteFriendsEnabled = !buildMeta.isQuali(),
             eventSink = ::handleEvents,
         )
     }
